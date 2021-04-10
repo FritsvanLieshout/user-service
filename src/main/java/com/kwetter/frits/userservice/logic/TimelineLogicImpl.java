@@ -1,11 +1,11 @@
-package com.kwetter.frits.accountservice.logic;
+package com.kwetter.frits.userservice.logic;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kwetter.frits.accountservice.configuration.KafkaProperties;
-import com.kwetter.frits.accountservice.entity.User;
-import com.kwetter.frits.accountservice.interfaces.TimelineLogic;
-import com.kwetter.frits.accountservice.logic.dto.UserTimelineDTO;
+import com.kwetter.frits.userservice.configuration.KafkaProperties;
+import com.kwetter.frits.userservice.entity.User;
+import com.kwetter.frits.userservice.interfaces.TimelineLogic;
+import com.kwetter.frits.userservice.logic.dto.UserTimelineDTO;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
@@ -39,14 +39,14 @@ public class TimelineLogicImpl implements TimelineLogic {
     }
 
     @Override
-    public void timeLineAccountCreate(User user) throws Exception {
+    public void timeLineUserCreate(User user) throws Exception {
         try {
             UserTimelineDTO userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified());
             String message = objectMapper.writeValueAsString(userTimeLineDTO);
             ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC, message);
             producer.send(record);
         } catch (JsonProcessingException e) {
-            logger.error("Could not send account object", e);
+            logger.error("Could not send new user", e);
             throw new Exception(e);
         }
     }

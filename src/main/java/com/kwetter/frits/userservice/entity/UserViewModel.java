@@ -1,42 +1,30 @@
-package com.kwetter.frits.accountservice.entity;
+package com.kwetter.frits.userservice.entity;
 
-import org.hibernate.validator.constraints.Length;
-
-import javax.persistence.*;
 import java.util.UUID;
 
-@Entity
-@Table(name = "account")
-public class User {
+public class UserViewModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID userId;
-
-    @Column(length = 24)
-    @Length(min= 2, max = 24)
     private String username;
-
-    @Column(length = 36)
-    @Length(min= 2, max = 36)
+    private String password;
     private String nickName;
-
     private String profileImage;
-
     private Boolean verified;
 
-    public User() {}
+    public UserViewModel() {}
 
-    public User(String username, String nickName, String profileImage, boolean verified) {
+    public UserViewModel(String username, String password, String nickName, String profileImage, boolean verified) {
         this.username = username;
+        this.password = password;
         this.nickName = nickName;
         this.profileImage = profileImage;
         this.verified = verified;
     }
 
-    public User(UUID userId, String username, String nickName, String profileImage, boolean verified) {
+    public UserViewModel(UUID userId, String username, String password, String nickName, String profileImage, boolean verified) {
         this.userId = userId;
         this.username = username;
+        this.password = password;
         this.nickName = nickName;
         this.profileImage = profileImage;
         this.verified = verified;
@@ -50,20 +38,24 @@ public class User {
         this.userId = id;
     }
 
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() { return password; }
+
+    public void setPassword(String password) { this.password = password; }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getProfileImage() { return profileImage; }
@@ -78,8 +70,4 @@ public class User {
         this.verified = verified;
     }
 
-    @Override
-    public String toString() {
-        return "Account [id=" + userId + ", username=" + username + ", nickname=" + nickName + ", image=" + profileImage + ", verified=" + verified + "]";
-    }
 }

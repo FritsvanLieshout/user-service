@@ -1,6 +1,6 @@
-package com.kwetter.frits.accountservice.interfaces;
+package com.kwetter.frits.userservice.interfaces;
 
-import com.kwetter.frits.accountservice.entity.User;
+import com.kwetter.frits.userservice.entity.User;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.Optional;
@@ -9,5 +9,5 @@ import java.util.UUID;
 @Validated
 public interface UserLogic {
     Optional<User> findById(UUID id);
-    User createAccount(User user);
+    User createUser(User user);
 }

@@ -1,8 +1,8 @@
-package com.kwetter.frits.accountservice.logic.dto;
+package com.kwetter.frits.userservice.entity;
 
 import java.util.UUID;
 
-public class UserTimelineDTO {
+public class TimelineUser {
 
     private UUID userId;
     private String username;
@@ -10,7 +10,9 @@ public class UserTimelineDTO {
     private String profileImage;
     private Boolean verified;
 
-    public UserTimelineDTO(UUID userId, String username, String nickName, String profileImage, Boolean verified) {
+    public TimelineUser() {}
+
+    public TimelineUser(UUID userId, String username, String nickName, String profileImage, Boolean verified) {
         this.userId = userId;
         this.username = username;
         this.nickName = nickName;
@@ -50,11 +52,7 @@ public class UserTimelineDTO {
         this.profileImage = profileImage;
     }
 
-    public Boolean getVerified() {
-        return verified;
-    }
+    public Boolean getVerified() { return verified; }
 
-    public void setVerified(Boolean verified) {
-        this.verified = verified;
-    }
+    public void setVerified(Boolean verified) { this.verified = verified; }
 }

@@ -1,6 +1,6 @@
-package com.kwetter.frits.accountservice.repository;
+package com.kwetter.frits.userservice.repository;
 
-import com.kwetter.frits.accountservice.entity.User;
+import com.kwetter.frits.userservice.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
