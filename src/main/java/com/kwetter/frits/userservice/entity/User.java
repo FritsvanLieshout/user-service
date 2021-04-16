@@ -19,10 +19,6 @@ public class User {
     @NotNull
     private String username;
 
-//    @Column(length = 48)
-//    @Length(min = 8, max = 48)
-//    private String password;
-
     @Column(length = 36)
     @Length(min= 2, max = 36)
     private String nickName;

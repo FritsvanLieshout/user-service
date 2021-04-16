@@ -14,13 +14,9 @@ public class UserAuthDTO {
         this.password = password;
     }
 
-    public UUID getUserId() {
-        return userId;
-    }
+    public UUID getUserId() { return userId; }
 
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
+    public void setUserId(UUID userId) { this.userId = userId; }
 
     public String getUsername() {
         return username;

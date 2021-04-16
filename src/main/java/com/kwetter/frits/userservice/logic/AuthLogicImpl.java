@@ -1,9 +1,12 @@
 package com.kwetter.frits.userservice.logic;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kwetter.frits.userservice.configuration.KafkaProperties;
 import com.kwetter.frits.userservice.interfaces.AuthLogic;
+import com.kwetter.frits.userservice.logic.dto.UserAuthDTO;
 import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -34,18 +37,19 @@ public class AuthLogicImpl implements AuthLogic {
         Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
         log.info("Kafka producer initialized");
     }
+
     @Override
     public void registerNewUser(UUID userId, String username, String password) throws Exception {
-//        try {
-//            UserAuthDTO userAuthDTO = new UserAuthDTO(userId, username, password);
-//            String message = objectMapper.writeValueAsString(userAuthDTO);
-//            ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC, message);
-//            producer.send(record);
-//        } catch (JsonProcessingException e) {
-//            logger.error("Could not send new user", e);
-//            throw new Exception(e);
-//        }
-        logger.info("User Registered: userId=" + userId + ", username=" + username + ", password=" + password);
+        try {
+            UserAuthDTO userAuthDTO = new UserAuthDTO(userId, username, password);
+            String message = objectMapper.writeValueAsString(userAuthDTO);
+            ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC, message);
+            producer.send(record);
+        } catch (JsonProcessingException e) {
+            logger.error("Could not send new user", e);
+            throw new Exception(e);
+        }
+        logger.info("User Registered: username=" + username + ", password=" + password);
     }
 
     @PreDestroy
