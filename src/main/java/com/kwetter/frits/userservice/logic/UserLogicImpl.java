@@ -26,4 +26,12 @@ public class UserLogicImpl implements UserLogic {
     public User createUser(User user) {
         return userRepository.save(user);
     }
+
+    @Override
+    public Boolean userAlreadyExist(String username) {
+        if (userRepository.existsUserByUsername(username)) {
+           return true;
+        }
+        return false;
+    }
 }

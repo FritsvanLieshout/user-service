@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface UserLogic {
     Optional<User> findById(UUID id);
     User createUser(User user);
+    Boolean userAlreadyExist(String username);
 }

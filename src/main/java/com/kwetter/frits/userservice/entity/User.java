@@ -14,7 +14,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID userId;
 
-    @Column(length = 24)
+    @Column(length = 24, unique = true)
     @Length(min= 2, max = 24)
     @NotNull
     private String username;
