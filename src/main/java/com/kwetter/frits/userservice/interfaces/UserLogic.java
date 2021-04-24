@@ -11,4 +11,5 @@ public interface UserLogic {
     Optional<User> findById(UUID id);
     User createUser(User user);
     Boolean userAlreadyExist(String username);
+    User findByUsername(String username);
 }

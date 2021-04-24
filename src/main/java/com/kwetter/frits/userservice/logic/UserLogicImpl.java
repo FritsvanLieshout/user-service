@@ -34,4 +34,9 @@ public class UserLogicImpl implements UserLogic {
         }
         return false;
     }
+
+    @Override
+    public User findByUsername(String username) {
+        return userRepository.findUserByUsername(username);
+    }
 }

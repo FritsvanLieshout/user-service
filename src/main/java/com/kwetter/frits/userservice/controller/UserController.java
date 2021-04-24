@@ -26,14 +26,14 @@ public class UserController {
         this.timelineLogic = timelineLogic;
     }
 
-    @GetMapping()
+    @GetMapping("/status")
     public ResponseEntity<User> retrieveUserById(@RequestBody User user) {
         try {
-            Optional<User> _user = userLogic.findById(user.getUserId());
-            if (_user.isEmpty()) {
+            User _user = userLogic.findByUsername(user.getUsername());
+            if (_user == null) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(_user.get(), HttpStatus.OK);
+            return new ResponseEntity<>(_user, HttpStatus.OK);
         }
         catch (Exception ex) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
