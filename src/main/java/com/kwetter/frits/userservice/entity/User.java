@@ -25,22 +25,26 @@ public class User {
 
     private String profileImage;
 
+    private String role;
+
     private Boolean verified;
 
     public User() {}
 
-    public User(String username, String nickName, String profileImage, boolean verified) {
+    public User(String username, String nickName, String profileImage, String role, boolean verified) {
         this.username = username;
         this.nickName = nickName;
         this.profileImage = profileImage;
+        this.role = role;
         this.verified = verified;
     }
 
-    public User(UUID userId, String username, String nickName, String profileImage, boolean verified) {
+    public User(UUID userId, String username, String nickName, String profileImage, String role, boolean verified) {
         this.userId = userId;
         this.username = username;
         this.nickName = nickName;
         this.profileImage = profileImage;
+        this.role = role;
         this.verified = verified;
     }
 
@@ -71,6 +75,10 @@ public class User {
     public String getProfileImage() { return profileImage; }
 
     public void setProfileImage(String profileImage) { this.profileImage = profileImage; }
+
+    public String getRole() { return role; }
+
+    public void setRole(String role) { this.role = role; }
 
     public Boolean getVerified() {
         return verified;
