@@ -10,24 +10,17 @@ public class UserViewModel {
     private String nickName;
     private String profileImage;
     private Boolean verified;
+    private String biography;
 
     public UserViewModel() {}
 
-    public UserViewModel(String username, String password, String nickName, String profileImage, boolean verified) {
+    public UserViewModel(String username, String password, String nickName, String profileImage, boolean verified, String biography) {
         this.username = username;
         this.password = password;
         this.nickName = nickName;
         this.profileImage = profileImage;
         this.verified = verified;
-    }
-
-    public UserViewModel(UUID userId, String username, String password, String nickName, String profileImage, boolean verified) {
-        this.userId = userId;
-        this.username = username;
-        this.password = password;
-        this.nickName = nickName;
-        this.profileImage = profileImage;
-        this.verified = verified;
+        this.biography = biography;
     }
 
     public UUID getUserId() {
@@ -70,4 +63,7 @@ public class UserViewModel {
         this.verified = verified;
     }
 
+    public String getBiography() { return biography; }
+
+    public void setBiography(String biography) { this.biography = biography; }
 }

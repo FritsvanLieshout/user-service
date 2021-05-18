@@ -41,7 +41,7 @@ public class TimelineLogicImpl implements TimelineLogic {
     @Override
     public void timeLineUserCreate(User user) throws Exception {
         try {
-            var userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified());
+            var userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified(), user.getBiography());
             var message = objectMapper.writeValueAsString(userTimeLineDTO);
             ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC, message);
             producer.send(record);
