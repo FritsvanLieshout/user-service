@@ -1,6 +1,6 @@
 package com.kwetter.frits.userservice.exception;
 
-public class ExceptionMessage {
+public class ExceptionMessage extends RuntimeException {
 
     private String message;
 

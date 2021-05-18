@@ -24,7 +24,7 @@ public class TimelineLogicImpl implements TimelineLogic {
 
     private final KafkaProperties kafkaProperties;
 
-    private final static Logger logger = LoggerFactory.getLogger(TimelineLogicImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(TimelineLogicImpl.class);
     private KafkaProducer<String, String> producer;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -41,8 +41,8 @@ public class TimelineLogicImpl implements TimelineLogic {
     @Override
     public void timeLineUserCreate(User user) throws Exception {
         try {
-            UserTimelineDTO userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified());
-            String message = objectMapper.writeValueAsString(userTimeLineDTO);
+            var userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified());
+            var message = objectMapper.writeValueAsString(userTimeLineDTO);
             ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC, message);
             producer.send(record);
         } catch (JsonProcessingException e) {

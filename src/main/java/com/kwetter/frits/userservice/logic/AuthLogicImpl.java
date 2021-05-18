@@ -18,13 +18,13 @@ import java.util.UUID;
 @Service
 public class AuthLogicImpl implements AuthLogic {
 
-    private final Logger log = LoggerFactory.getLogger(TimelineLogicImpl.class);
+    private final Logger log = LoggerFactory.getLogger(AuthLogicImpl.class);
 
     private static final String TOPIC = "user-register";
 
     private final KafkaProperties kafkaProperties;
 
-    private final static Logger logger = LoggerFactory.getLogger(TimelineLogicImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthLogicImpl.class);
     private KafkaProducer<String, String> producer;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -41,8 +41,8 @@ public class AuthLogicImpl implements AuthLogic {
     @Override
     public void registerNewUser(UUID userId, String username, String password) throws Exception {
         try {
-            UserAuthDTO userAuthDTO = new UserAuthDTO(userId, username, password);
-            String message = objectMapper.writeValueAsString(userAuthDTO);
+            var userAuthDTO = new UserAuthDTO(userId, username, password);
+            var message = objectMapper.writeValueAsString(userAuthDTO);
             ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC, message);
             producer.send(record);
         } catch (JsonProcessingException e) {

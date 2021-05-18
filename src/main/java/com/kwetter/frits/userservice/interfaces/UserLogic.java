@@ -12,4 +12,5 @@ public interface UserLogic {
     User createUser(User user);
     Boolean userAlreadyExist(String username);
     User findByUsername(String username);
+    User findUserByToken(String token);
 }
