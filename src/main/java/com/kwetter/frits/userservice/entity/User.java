@@ -7,11 +7,13 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user" , uniqueConstraints = { @UniqueConstraint(columnNames = "userId")})
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
     private UUID userId;
 
     @Column(length = 24, unique = true)
@@ -24,29 +26,25 @@ public class User {
     private String nickName;
 
     private String profileImage;
-
     private String role;
-
     private Boolean verified;
+    private String biography;
 
     public User() {}
 
-    public User(String username, String nickName, String profileImage, String role, boolean verified) {
-        this.username = username;
-        this.nickName = nickName;
-        this.profileImage = profileImage;
-        this.role = role;
-        this.verified = verified;
-    }
-
-    public User(UUID userId, String username, String nickName, String profileImage, String role, boolean verified) {
+    public User(UUID userId, String username, String nickName, String profileImage, String role, boolean verified, String biography) {
         this.userId = userId;
         this.username = username;
         this.nickName = nickName;
         this.profileImage = profileImage;
         this.role = role;
         this.verified = verified;
+        this.biography = biography;
     }
+
+    public Long getId() { return id; }
+
+    public void setId(Long id) { this.id = id; }
 
     public UUID getUserId() {
         return userId;
@@ -87,6 +85,10 @@ public class User {
     public void setVerified(Boolean verified) {
         this.verified = verified;
     }
+
+    public String getBiography() { return biography; }
+
+    public void setBiography(String biography) { this.biography = biography; }
 
     @Override
     public String toString() {

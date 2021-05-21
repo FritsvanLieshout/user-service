@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kwetter.frits.userservice.configuration.KafkaProperties;
 import com.kwetter.frits.userservice.interfaces.AuthLogic;
 import com.kwetter.frits.userservice.logic.dto.UserAuthDTO;
+import com.kwetter.frits.userservice.logic.dto.UserTimelineDTO;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;

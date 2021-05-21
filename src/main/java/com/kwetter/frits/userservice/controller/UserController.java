@@ -2,18 +2,12 @@ package com.kwetter.frits.userservice.controller;
 
 import com.kwetter.frits.userservice.entity.User;
 import com.kwetter.frits.userservice.entity.UserViewModel;
-import com.kwetter.frits.userservice.exception.ExceptionMessage;
 import com.kwetter.frits.userservice.logic.AuthLogicImpl;
 import com.kwetter.frits.userservice.logic.UserLogicImpl;
 import com.kwetter.frits.userservice.logic.TimelineLogicImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
@@ -22,7 +16,6 @@ public class UserController {
     private final UserLogicImpl userLogic;
     private final AuthLogicImpl authLogic;
     private final TimelineLogicImpl timelineLogic;
-    private final Logger log = LoggerFactory.getLogger(UserController.class);
 
     public UserController(UserLogicImpl userLogic, AuthLogicImpl authLogic, TimelineLogicImpl timelineLogic) {
         this.userLogic = userLogic;
@@ -57,9 +50,9 @@ public class UserController {
     public ResponseEntity<User> createNewUser(@RequestBody UserViewModel user) {
         try {
             if (!userLogic.userAlreadyExist(user.getUsername())) {
-                var createdUser = userLogic.createUser(new User(user.getUsername(), user.getNickName(), user.getProfileImage(), "KWETTER_USER", false));
+                var userId = userLogic.generateUserId();
+                var createdUser = userLogic.createUser(new User(userId, user.getUsername(), user.getNickName(), user.getProfileImage(), "KWETTER_USER", false, user.getBiography()));
                 if (createdUser != null && user.getPassword() != null) {
-                    //PASSWORD need to be a base64 string format, this need to be initialized in frontend #Security
                     authLogic.registerNewUser(createdUser.getUserId(), createdUser.getUsername(), user.getPassword());
                     timelineLogic.timeLineUserCreate(createdUser);
                     return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
@@ -67,6 +60,36 @@ public class UserController {
                 return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        catch (Exception ex) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<User> editUser(@RequestBody UserViewModel user) {
+        try {
+            var userObject = new User(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getRole(), user.getVerified(), user.getBiography());
+            var updatedUser = userLogic.editUser(userObject);
+
+            if (updatedUser != null) {
+                return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        catch (Exception ex) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/permanent/remove")
+    public ResponseEntity<Boolean> removeUser(@RequestBody UserViewModel user) {
+        try {
+            var userObject = userLogic.findByUsername(user.getUsername());
+            userLogic.removeUser(userObject);
+            return new ResponseEntity<>(null, HttpStatus.OK);
         }
 
         catch (Exception ex) {
