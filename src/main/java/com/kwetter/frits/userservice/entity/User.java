@@ -7,11 +7,13 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user" , uniqueConstraints = { @UniqueConstraint(columnNames = "userId")})
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
     private UUID userId;
 
     @Column(length = 24, unique = true)
@@ -30,7 +32,8 @@ public class User {
 
     public User() {}
 
-    public User(String username, String nickName, String profileImage, String role, boolean verified, String biography) {
+    public User(UUID userId, String username, String nickName, String profileImage, String role, boolean verified, String biography) {
+        this.userId = userId;
         this.username = username;
         this.nickName = nickName;
         this.profileImage = profileImage;
@@ -38,6 +41,10 @@ public class User {
         this.verified = verified;
         this.biography = biography;
     }
+
+    public Long getId() { return id; }
+
+    public void setId(Long id) { this.id = id; }
 
     public UUID getUserId() {
         return userId;

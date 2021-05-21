@@ -50,7 +50,8 @@ public class UserController {
     public ResponseEntity<User> createNewUser(@RequestBody UserViewModel user) {
         try {
             if (!userLogic.userAlreadyExist(user.getUsername())) {
-                var createdUser = userLogic.createUser(new User(user.getUsername(), user.getNickName(), user.getProfileImage(), "KWETTER_USER", false, user.getBiography()));
+                var userId = userLogic.generateUserId();
+                var createdUser = userLogic.createUser(new User(userId, user.getUsername(), user.getNickName(), user.getProfileImage(), "KWETTER_USER", false, user.getBiography()));
                 if (createdUser != null && user.getPassword() != null) {
                     authLogic.registerNewUser(createdUser.getUserId(), createdUser.getUsername(), user.getPassword());
                     timelineLogic.timeLineUserCreate(createdUser);
@@ -59,6 +60,36 @@ public class UserController {
                 return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        catch (Exception ex) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<User> editUser(@RequestBody UserViewModel user) {
+        try {
+            var userObject = new User(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getRole(), user.getVerified(), user.getBiography());
+            var updatedUser = userLogic.editUser(userObject);
+
+            if (updatedUser != null) {
+                return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        catch (Exception ex) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/permanent/remove")
+    public ResponseEntity<Boolean> removeUser(@RequestBody UserViewModel user) {
+        try {
+            var userObject = userLogic.findByUsername(user.getUsername());
+            userLogic.removeUser(userObject);
+            return new ResponseEntity<>(null, HttpStatus.OK);
         }
 
         catch (Exception ex) {

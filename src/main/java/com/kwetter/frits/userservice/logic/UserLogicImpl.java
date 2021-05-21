@@ -8,20 +8,26 @@ import io.jsonwebtoken.*;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.DatatypeConverter;
-import java.io.IOException;
 import java.security.Key;
+import java.sql.Time;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class UserLogicImpl implements UserLogic {
 
     private UserRepository userRepository;
+    private TimelineLogicImpl timelineLogic;
     private final JwtUtil jwtUtil;
 
-    public UserLogicImpl(UserRepository userRepository, JwtUtil jwtUtil) {
+    public UserLogicImpl(UserRepository userRepository, TimelineLogicImpl timelineLogic, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
+        this.timelineLogic = timelineLogic;
         this.jwtUtil = jwtUtil;
     }
 
@@ -52,6 +58,34 @@ public class UserLogicImpl implements UserLogic {
         return userRepository.findUserByUsername(username);
     }
 
+    @Override
+    public User editUser(@NotNull(message = "User cannot be null") @Valid User user) {
+        var editedUser = userRepository.findUserByUsername(user.getUsername());
+        if (editedUser != null) {
+            editedUser.setNickName(user.getNickName());
+            editedUser.setProfileImage(user.getProfileImage());
+            editedUser.setBiography(user.getBiography());
+            timelineLogic.timeLineUserEdit(editedUser);
+            return userRepository.save(editedUser);
+        }
+        return null;
+    }
+
+    @Override
+    public Boolean removeUser(User user) {
+        if (user != null) {
+            userRepository.delete(user);
+            timelineLogic.timeLineUserDelete(user);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public UUID generateUserId() {
+        return generateRandomUUID();
+    }
+
     private String getSubjectOfToken(String token) {
         try {
             var signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -68,5 +102,13 @@ public class UserLogicImpl implements UserLogic {
         catch (JwtException e) {
             throw new IllegalStateException(String.format("Token %s cannot be trusted", token));
         }
+    }
+
+    private UUID generateRandomUUID() {
+        var uuid = UUID.randomUUID();
+        if (userRepository.existsUserByUserId(uuid)) {
+            return generateRandomUUID();
+        }
+        return uuid;
     }
 }

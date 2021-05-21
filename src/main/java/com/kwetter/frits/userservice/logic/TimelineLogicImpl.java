@@ -19,11 +19,7 @@ import javax.annotation.PreDestroy;
 public class TimelineLogicImpl implements TimelineLogic {
 
     private final Logger log = LoggerFactory.getLogger(TimelineLogicImpl.class);
-
-    private static final String TOPIC = "user-created";
-
     private final KafkaProperties kafkaProperties;
-
     private static final Logger logger = LoggerFactory.getLogger(TimelineLogicImpl.class);
     private KafkaProducer<String, String> producer;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -43,11 +39,35 @@ public class TimelineLogicImpl implements TimelineLogic {
         try {
             var userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified(), user.getBiography());
             var message = objectMapper.writeValueAsString(userTimeLineDTO);
-            ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC, message);
+            ProducerRecord<String, String> record = new ProducerRecord<>("user-created", message);
             producer.send(record);
         } catch (JsonProcessingException e) {
             logger.error("Could not send new user", e);
             throw new Exception(e);
+        }
+    }
+
+    @Override
+    public void timeLineUserEdit(User user) {
+        try {
+            var userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified(), user.getBiography());
+            var message = objectMapper.writeValueAsString(userTimeLineDTO);
+            ProducerRecord<String, String> record = new ProducerRecord<>("user-edited", message);
+            producer.send(record);
+        } catch (JsonProcessingException e) {
+            logger.error("Could not send updated user", e);
+        }
+    }
+
+    @Override
+    public void timeLineUserDelete(User user) {
+        try {
+            var userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified(), user.getBiography());
+            var message = objectMapper.writeValueAsString(userTimeLineDTO);
+            ProducerRecord<String, String> record = new ProducerRecord<>("permanent-user-deleted", message);
+            producer.send(record);
+        } catch (JsonProcessingException e) {
+            logger.error("Could not send deleted user", e);
         }
     }
 

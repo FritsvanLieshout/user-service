@@ -11,6 +11,8 @@ public class UserTimelineDTO {
     private Boolean verified;
     private String biography;
 
+    public UserTimelineDTO() {}
+
     public UserTimelineDTO(UUID userId, String username, String nickName, String profileImage, Boolean verified, String biography) {
         this.userId = userId;
         this.username = username;
