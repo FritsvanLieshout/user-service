@@ -65,6 +65,7 @@ public class UserLogicImpl implements UserLogic {
             editedUser.setNickName(user.getNickName());
             editedUser.setProfileImage(user.getProfileImage());
             editedUser.setBiography(user.getBiography());
+            editedUser.setVerified(user.getVerified());
             timelineLogic.timeLineUserEdit(editedUser);
             return userRepository.save(editedUser);
         }
@@ -76,6 +77,7 @@ public class UserLogicImpl implements UserLogic {
         if (user != null) {
             userRepository.delete(user);
             timelineLogic.timeLineUserDelete(user);
+            timelineLogic.timeLineUserPermanentDelete(user);
             return true;
         }
         return false;

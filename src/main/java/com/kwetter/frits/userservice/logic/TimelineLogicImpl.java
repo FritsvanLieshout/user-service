@@ -60,11 +60,23 @@ public class TimelineLogicImpl implements TimelineLogic {
     }
 
     @Override
-    public void timeLineUserDelete(User user) {
+    public void timeLineUserPermanentDelete(User user) {
         try {
             var userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified(), user.getBiography());
             var message = objectMapper.writeValueAsString(userTimeLineDTO);
             ProducerRecord<String, String> record = new ProducerRecord<>("permanent-user-deleted", message);
+            producer.send(record);
+        } catch (JsonProcessingException e) {
+            logger.error("Could not send deleted user", e);
+        }
+    }
+
+    @Override
+    public void timeLineUserDelete(User user) {
+        try {
+            var userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified(), user.getBiography());
+            var message = objectMapper.writeValueAsString(userTimeLineDTO);
+            ProducerRecord<String, String> record  = new ProducerRecord<>("user-deleted", message);
             producer.send(record);
         } catch (JsonProcessingException e) {
             logger.error("Could not send deleted user", e);
