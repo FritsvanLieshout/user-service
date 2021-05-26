@@ -8,17 +8,14 @@ import io.jsonwebtoken.*;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
-import java.sql.Time;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@Transactional
 public class UserLogicImpl implements UserLogic {
 
     private UserRepository userRepository;
