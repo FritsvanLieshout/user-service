@@ -37,7 +37,7 @@ public class TimelineLogicImpl implements TimelineLogic {
     @Override
     public void timeLineUserCreate(User user) throws Exception {
         try {
-            var userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified(), user.getBiography());
+            var userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified(), user.getBiography(), user.getRole());
             var message = objectMapper.writeValueAsString(userTimeLineDTO);
             ProducerRecord<String, String> record = new ProducerRecord<>("user-created", message);
             producer.send(record);
@@ -50,7 +50,7 @@ public class TimelineLogicImpl implements TimelineLogic {
     @Override
     public void timeLineUserEdit(User user) {
         try {
-            var userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified(), user.getBiography());
+            var userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified(), user.getBiography(), user.getRole());
             var message = objectMapper.writeValueAsString(userTimeLineDTO);
             ProducerRecord<String, String> record = new ProducerRecord<>("user-edited", message);
             producer.send(record);
@@ -62,7 +62,7 @@ public class TimelineLogicImpl implements TimelineLogic {
     @Override
     public void timeLineUserPermanentDelete(User user) {
         try {
-            var userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified(), user.getBiography());
+            var userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified(), user.getBiography(), user.getRole());
             var message = objectMapper.writeValueAsString(userTimeLineDTO);
             ProducerRecord<String, String> record = new ProducerRecord<>("permanent-user-deleted", message);
             producer.send(record);
@@ -74,7 +74,7 @@ public class TimelineLogicImpl implements TimelineLogic {
     @Override
     public void timeLineUserDelete(User user) {
         try {
-            var userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified(), user.getBiography());
+            var userTimeLineDTO = new UserTimelineDTO(user.getUserId(), user.getUsername(), user.getNickName(), user.getProfileImage(), user.getVerified(), user.getBiography(), user.getRole());
             var message = objectMapper.writeValueAsString(userTimeLineDTO);
             ProducerRecord<String, String> record  = new ProducerRecord<>("user-deleted", message);
             producer.send(record);
