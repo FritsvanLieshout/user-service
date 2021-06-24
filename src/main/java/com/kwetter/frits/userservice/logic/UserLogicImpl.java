@@ -63,6 +63,7 @@ public class UserLogicImpl implements UserLogic {
             editedUser.setProfileImage(user.getProfileImage());
             editedUser.setBiography(user.getBiography());
             editedUser.setVerified(user.getVerified());
+            editedUser.setRole(user.getRole());
             timelineLogic.timeLineUserEdit(editedUser);
             return userRepository.save(editedUser);
         }
