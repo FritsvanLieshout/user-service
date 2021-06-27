@@ -18,13 +18,15 @@ import java.util.UUID;
 @Service
 public class UserLogicImpl implements UserLogic {
 
-    private UserRepository userRepository;
-    private TimelineLogicImpl timelineLogic;
+    private final UserRepository userRepository;
+    private final TimelineLogicImpl timelineLogic;
+    private final ModerationLogicImpl moderationLogic;
     private final JwtUtil jwtUtil;
 
-    public UserLogicImpl(UserRepository userRepository, TimelineLogicImpl timelineLogic, JwtUtil jwtUtil) {
+    public UserLogicImpl(UserRepository userRepository, TimelineLogicImpl timelineLogic, ModerationLogicImpl moderationLogic, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.timelineLogic = timelineLogic;
+        this.moderationLogic = moderationLogic;
         this.jwtUtil = jwtUtil;
     }
 
@@ -65,6 +67,7 @@ public class UserLogicImpl implements UserLogic {
             editedUser.setVerified(user.getVerified());
             editedUser.setRole(user.getRole());
             timelineLogic.timeLineUserEdit(editedUser);
+            moderationLogic.moderationUserEdit(editedUser);
             return userRepository.save(editedUser);
         }
         return null;
@@ -73,9 +76,10 @@ public class UserLogicImpl implements UserLogic {
     @Override
     public Boolean removeUser(User user) {
         if (user != null) {
-            userRepository.delete(user);
             timelineLogic.timeLineUserDelete(user);
             timelineLogic.timeLineUserPermanentDelete(user);
+            moderationLogic.moderationUserDelete(user);
+            userRepository.delete(user);
             return true;
         }
         return false;

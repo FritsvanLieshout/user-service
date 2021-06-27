@@ -3,6 +3,7 @@ package com.kwetter.frits.userservice.controller;
 import com.kwetter.frits.userservice.entity.User;
 import com.kwetter.frits.userservice.entity.UserViewModel;
 import com.kwetter.frits.userservice.logic.AuthLogicImpl;
+import com.kwetter.frits.userservice.logic.ModerationLogicImpl;
 import com.kwetter.frits.userservice.logic.UserLogicImpl;
 import com.kwetter.frits.userservice.logic.TimelineLogicImpl;
 import org.springframework.http.HttpStatus;
@@ -16,11 +17,13 @@ public class UserController {
     private final UserLogicImpl userLogic;
     private final AuthLogicImpl authLogic;
     private final TimelineLogicImpl timelineLogic;
+    private final ModerationLogicImpl moderationLogic;
 
-    public UserController(UserLogicImpl userLogic, AuthLogicImpl authLogic, TimelineLogicImpl timelineLogic) {
+    public UserController(UserLogicImpl userLogic, AuthLogicImpl authLogic, TimelineLogicImpl timelineLogic, ModerationLogicImpl moderationLogic) {
         this.userLogic = userLogic;
         this.authLogic = authLogic;
         this.timelineLogic = timelineLogic;
+        this.moderationLogic = moderationLogic;
     }
 
     @GetMapping("/status")
@@ -55,6 +58,7 @@ public class UserController {
                 if (createdUser != null && user.getPassword() != null) {
                     authLogic.registerNewUser(createdUser.getUserId(), createdUser.getUsername(), user.getPassword());
                     timelineLogic.timeLineUserCreate(createdUser);
+                    moderationLogic.moderationUserCreate(createdUser);
                     return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
                 }
                 return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
